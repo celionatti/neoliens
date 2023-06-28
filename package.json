@@ -1,0 +1,31 @@
+{
+  "name": "neoliens",
+  "version": "1.0.0",
+  "description": "Neoliens Slim framework",
+  "main": "index.js",
+  "scripts": {
+    "tailwind:build": "postcss src/styles.css -o resources/css/styles.css",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production"
+  },
+  "author": "celio natti <celionatti@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.2"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^4.3.0",
+    "bootstrap-icons": "^1.10.5",
+    "core-js": "^3.31.0",
+    "datatables.net": "^1.13.4",
+    "datatables.net-dt": "^1.13.4",
+    "file-loader": "^6.2.0",
+    "purgecss-webpack-plugin": "^5.0.0",
+    "sass": "^1.63.6",
+    "sass-loader": "^13.3.2",
+    "webpack-notifier": "^1.15.0"
+  }
+}
