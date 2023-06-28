@@ -1,7 +1,7 @@
-const Encore = require("@symfony/webpack-encore");
-const { PurgeCSSPlugin } = require("purgecss-webpack-plugin")
 const glob = require("glob-all")
 const path = require("path")
+const { PurgeCSSPlugin } = require("purgecss-webpack-plugin")
+const Encore = require("@symfony/webpack-encore")
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -48,15 +48,15 @@ Encore
   // enables hashed filenames (e.g. app.abc123.css)
   .enableVersioning()
   
-  .configureTerserPlugin((options) => {
-      options.terserOptions = {
-        // ...additional terser options
-        extractComments: false,
-        compress: {
-          drop_console: true,
-        },
-      };
-    })
+  // .configureTerserPlugin((options) => {
+  //     options.terserOptions = {
+  //       // ...additional terser options
+  //       extractComments: false,
+  //       compress: {
+  //         drop_console: true,
+  //       },
+  //     };
+  //   })
 
   .configureBabel((config) => {
     config.plugins.push("@babel/plugin-proposal-class-properties");
@@ -77,13 +77,13 @@ Encore
   // enables Sass/SCSS support
   .enableSassLoader()
 
-  .addPlugin(
-    new PurgeCSSPlugin({
-      paths: glob.sync([
-        path.join(__dirname, "resources/views/**/*.php"), // Adjust the path to match your PHP files
-        path.join(__dirname, "resources/views/**/*.twig"), // Adjust the path to match your PHP files
-      ]),
-    })
-  )
+  // .addPlugin(
+  //   new PurgeCSSPlugin({
+  //     paths: glob.sync([
+  //       // path.join(__dirname, "resources/views/**/*.php"), // Adjust the path to match your PHP files
+  //       path.join(__dirname, "resources/views/**/*.twig"), // Adjust the path to match your PHP files
+  //     ]),
+  //   })
+  // )
 
 module.exports = Encore.getWebpackConfig();
