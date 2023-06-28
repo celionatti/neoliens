@@ -11,25 +11,6 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 
 Encore
 
-.addPlugin(
-  new PurgeCSSPlugin({
-    paths: glob.sync([
-      path.join(__dirname, "resources/views/**/*.php"), // Adjust the path to match your PHP files
-      path.join(__dirname, "resources/views/**/*.twig"), // Adjust the path to match your PHP files
-    ]),
-  })
-)
-
-.configureTerserPlugin((options) => {
-    options.terserOptions = {
-      // ...additional terser options
-      extractComments: false,
-      compress: {
-        drop_console: true,
-      },
-    };
-  })
-
   // directory where compiled assets will be stored
   .setOutputPath("public/build/")
 
@@ -66,6 +47,25 @@ Encore
 
   // enables hashed filenames (e.g. app.abc123.css)
   .enableVersioning()
+  
+  .configureTerserPlugin((options) => {
+      options.terserOptions = {
+        // ...additional terser options
+        extractComments: false,
+        compress: {
+          drop_console: true,
+        },
+      };
+    })
+
+    .addPlugin(
+      new PurgeCSSPlugin({
+        paths: glob.sync([
+          path.join(__dirname, "resources/views/**/*.php"), // Adjust the path to match your PHP files
+          path.join(__dirname, "resources/views/**/*.twig"), // Adjust the path to match your PHP files
+        ]),
+      })
+    )
 
   .configureBabel((config) => {
     config.plugins.push("@babel/plugin-proposal-class-properties");
