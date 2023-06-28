@@ -15,6 +15,7 @@ Encore
   new PurgeCSSPlugin({
     paths: glob.sync([
       path.join(__dirname, "resources/views/**/*.php"), // Adjust the path to match your PHP files
+      path.join(__dirname, "resources/views/**/*.twig"), // Adjust the path to match your PHP files
     ]),
   })
 )
@@ -44,7 +45,6 @@ Encore
    * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
    */
   .addEntry("app", "./resources/js/app.js")
-  .addEntry("dashboard", "./resources/js/dashboard.js")
 
   // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
   .splitEntryChunks()
