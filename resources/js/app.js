@@ -1,4 +1,3 @@
-import "../css/styles.css"
+import "../css/app.scss"
 
-
-require("tailwindcss")
+require('bootstrap')

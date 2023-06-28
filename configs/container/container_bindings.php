@@ -23,8 +23,10 @@ use Symfony\Component\Mailer\Transport;
 use Symfony\Bridge\Twig\Mime\BodyRenderer;
 use Neoliens\Core\DataObjects\SessionConfig;
 use Neoliens\Core\Contracts\SessionInterface;
+use Neoliens\Core\RouteEntityBindingStrategy;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use Symfony\WebpackEncoreBundle\Asset\TagRenderer;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
 use Symfony\WebpackEncoreBundle\Twig\EntryFilesTwigExtension;
@@ -38,6 +40,13 @@ return [
         $router         = require ROUTE_PATH . '/web.php';
 
         $app = AppFactory::create();
+
+        $app->getRouteCollector()->setDefaultInvocationStrategy(
+            new RouteEntityBindingStrategy(
+                // $container->get(EntityManagerServiceInterface::class),
+                $app->getResponseFactory()
+            )
+        );
 
         $router($app);
 
@@ -63,21 +72,21 @@ return [
     /**
      * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig
      */
-    'webpack_encore.packages'               => fn() => new Packages(
+    'webpack_encore.packages'               => fn () => new Packages(
         new Package(new JsonManifestVersionStrategy(BUILD_PATH . '/manifest.json'))
     ),
     'webpack_encore.tag_renderer'           => fn(ContainerInterface $container) => new TagRenderer(
         new EntrypointLookup(BUILD_PATH . '/entrypoints.json'),
         $container->get('webpack_encore.packages')
     ),
-    ResponseFactoryInterface::class         => fn(App $app) => $app->getResponseFactory(),
-    AuthInterface::class                    => fn(ContainerInterface $container) => $container->get(
+    ResponseFactoryInterface::class         => fn (App $app) => $app->getResponseFactory(),
+    AuthInterface::class                    => fn (ContainerInterface $container) => $container->get(
         Auth::class
     ),
-    UserProviderServiceInterface::class     => fn(ContainerInterface $container) => $container->get(
+    UserProviderServiceInterface::class     => fn (ContainerInterface $container) => $container->get(
         UserProviderService::class
     ),
-    SessionInterface::class                 => fn(Config $config) => new Session(
+    SessionInterface::class                 => fn (Config $config) => new Session(
         new SessionConfig(
             $config->get('session.name', ''),
             $config->get('session.flash_name', 'flash'),
@@ -86,11 +95,13 @@ return [
             SameSite::from($config->get('session.samesite', 'lax'))
         )
     ),
-    RequestValidatorFactoryInterface::class => fn(ContainerInterface $container) => $container->get(
+    RequestValidatorFactoryInterface::class => fn (ContainerInterface $container) => $container->get(
         RequestValidatorFactory::class
     ),
-    'csrf'                                  => fn(ResponseFactoryInterface $responseFactory, Csrf $csrf) => new Guard(
-        $responseFactory, failureHandler: $csrf->failureHandler(), persistentTokenMode: true
+    'csrf'                                  => fn (ResponseFactoryInterface $responseFactory, Csrf $csrf) => new Guard(
+        $responseFactory,
+        failureHandler: $csrf->failureHandler(),
+        persistentTokenMode: true
     ),
     Filesystem::class                       => function (Config $config) {
         $adapter = match ($config->get('storage.driver')) {
@@ -104,6 +115,6 @@ return [
 
         return new Mailer($transport);
     },
-    BodyRendererInterface::class            => fn(Twig $twig) => new BodyRenderer($twig->getEnvironment()),
-    RouteParserInterface::class             => fn(App $app) => $app->getRouteCollector()->getRouteParser(),
+    BodyRendererInterface::class            => fn (Twig $twig) => new BodyRenderer($twig->getEnvironment()),
+    RouteParserInterface::class             => fn (App $app) => $app->getRouteCollector()->getRouteParser(),
 ];

@@ -58,15 +58,6 @@ Encore
       };
     })
 
-    .addPlugin(
-      new PurgeCSSPlugin({
-        paths: glob.sync([
-          path.join(__dirname, "resources/views/**/*.php"), // Adjust the path to match your PHP files
-          path.join(__dirname, "resources/views/**/*.twig"), // Adjust the path to match your PHP files
-        ]),
-      })
-    )
-
   .configureBabel((config) => {
     config.plugins.push("@babel/plugin-proposal-class-properties");
   })
@@ -84,6 +75,15 @@ Encore
   })
 
   // enables Sass/SCSS support
-  .enableSassLoader();
+  .enableSassLoader()
+
+  .addPlugin(
+    new PurgeCSSPlugin({
+      paths: glob.sync([
+        path.join(__dirname, "resources/views/**/*.php"), // Adjust the path to match your PHP files
+        path.join(__dirname, "resources/views/**/*.twig"), // Adjust the path to match your PHP files
+      ]),
+    })
+  )
 
 module.exports = Encore.getWebpackConfig();
