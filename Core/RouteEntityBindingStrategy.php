@@ -4,19 +4,19 @@ declare(strict_types = 1);
 
 namespace Neoliens\Core;
 
-use App\Contracts\EntityManagerServiceInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use ReflectionMethod;
 use ReflectionFunction;
 use ReflectionFunctionAbstract;
-use ReflectionMethod;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
+use Neoliens\Core\Contracts\EntityManagerServiceInterface;
 
 class RouteEntityBindingStrategy implements InvocationStrategyInterface
 {
     public function __construct(
-        // private readonly EntityManagerServiceInterface $entityManagerService,
+        private readonly EntityManagerServiceInterface $entityManagerService,
         private readonly ResponseFactoryInterface $responseFactory
     ) {
     }
