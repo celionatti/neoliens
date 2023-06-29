@@ -24,6 +24,7 @@ return function (App $app) {
     $app->add(ValidationExceptionMiddleware::class);
     $app->add(ValidationErrorsMiddleware::class);
     $app->add(StartSessionsMiddleware::class);
+    
     $app->addBodyParsingMiddleware();
     $app->addErrorMiddleware(
         (bool) $config->get('display_error_details'),
